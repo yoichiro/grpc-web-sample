@@ -1,0 +1,42 @@
+version: '3'
+services:
+  proto:
+    command: ./proto/scripts/protoc.sh
+    build:
+      context: .
+      dockerfile: DockerfileProto
+    volumes:
+      - .:/proto
+  server:
+    command: ./scripts/server.sh
+    build:
+      context: .
+      dockerfile: DockerfileServer
+    volumes:
+      - ./server:/go/src/grpc-web-sample
+    ports:
+      - "9090:9090"
+    depends_on:
+      - proto
+  envoy:
+    build:
+      context: .
+      dockerfile: DockerfileEnvoy
+    ports:
+      - "8080:8080"
+    links:
+      - server
+  client:
+    command: ./scripts/client.sh
+    build:
+      context: .
+      dockerfile: DockerfileClient
+    volumes:
+      - ./client:/client
+      - /client/node_modules
+    depends_on:
+      - proto
+    ports:
+      - "3000:3000"
+    environment:
+      - EXTEND_ESLINT=true

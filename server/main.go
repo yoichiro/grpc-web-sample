@@ -42,7 +42,7 @@ func (s *server) GetMessages(_ *emptypb.Empty, stream pb.Messenger_GetMessagesSe
 
 func (s *server) CreateMessage(ctx context.Context, r *pb.MessageRequest) (*pb.MessageResponse, error) {
 	log.Printf("Received: %v", r.GetMessage())
-	newR := &pb.MessageRequest{Message: r.GetMessage() + ": " + time.Now().Format("2000-01-02 15:04:05")}
+	newR := &pb.MessageRequest{Message: r.GetMessage() + ": " + time.Now().Format("2006-01-02 15:04:05")}
 	s.requests = append(s.requests, newR)
 	return &pb.MessageResponse{Message: r.GetMessage()}, nil
 }

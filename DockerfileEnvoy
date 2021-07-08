@@ -1,4 +1,4 @@
-FROM envoyproxy/envoy:v1.15.0
+FROM envoyproxy/envoy-dev:eba55c5a7b5fe478954988ad47fe8c596434deed
 COPY ./envoy.yaml /etc/envoy/envoy.yaml
 CMD /usr/local/bin/envoy -c /etc/envoy/envoy.yaml --log-level info
 EXPOSE 8080

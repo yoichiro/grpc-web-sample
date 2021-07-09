@@ -18,16 +18,19 @@ static_resources:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                 codec_type: auto
                 stat_prefix: ingress_http
+                stream_idle_timeout: 0s
                 route_config:
                   name: local_route
                   virtual_hosts:
                     - name: local_service
-                      domains: ["*"]
+                      domains: [ "*" ]
                       routes:
                         - match:
                             prefix: "/"
                           route:
                             cluster: message_service
+                            max_stream_duration:
+                              grpc_timeout_header_max: 0s
                       cors:
                         allow_origin_string_match:
                           - prefix: "*"
@@ -41,14 +44,10 @@ static_resources:
                   - name: envoy.filters.http.router
   clusters:
     - name: message_service
-      connect_timeout: 10s
+      connect_timeout: 0.25s
       type: logical_dns
       http2_protocol_options: {}
       lb_policy: round_robin
-      dns_lookup_family: V4_ONLY
-#      upstream_connection_options:
-#        tcp_keepalive:
-#          keepalive_time: 300
       load_assignment:
         cluster_name: message_service
         endpoints:

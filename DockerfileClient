@@ -1,4 +1,3 @@
-FROM node:12.16.1-alpine3.11
+FROM node:12.22.3
 
 WORKDIR /client
-RUN yarn

@@ -2,4 +2,5 @@
 
 set -xe
 
-fresh
+go build
+./grpc-web-sample

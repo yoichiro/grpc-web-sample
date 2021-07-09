@@ -1,11 +1,15 @@
 import React from "react";
-import { MessageContainer } from "./containers/Messages";
 import { gRPCClients } from "./gRPCClients";
+import { Echo } from "./components/Echo";
+import { EchoForm } from "./components/EchoForm";
 
-export const App = () => {
-  return (
-    <>
-      <MessageContainer clients={gRPCClients} />
-    </>
-  );
-};
+export class App extends React.Component<any, any> {
+  render() {
+    return (
+      <React.Fragment>
+        <EchoForm client={gRPCClients.echoClient} />
+        <Echo client={gRPCClients.echoClient} />
+      </React.Fragment>
+    );
+  }
+}

@@ -38,5 +38,3 @@ services:
       - proto
     ports:
       - "3000:3000"
-    environment:
-      - EXTEND_ESLINT=true

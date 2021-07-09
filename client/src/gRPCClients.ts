@@ -1,9 +1,9 @@
-import { MessengerClient } from "./messenger/MessengerServiceClientPb";
+import { EchoClient } from "./echo/EchoServiceClientPb";
 
 export type GRPCClients = {
-  messengerClient: MessengerClient;
+  echoClient: EchoClient;
 };
 
-export const gRPCClients = {
-  messengerClient: new MessengerClient("http://localhost:8080"),
+export const gRPCClients: GRPCClients = {
+  echoClient: new EchoClient("http://localhost:8080"),
 };

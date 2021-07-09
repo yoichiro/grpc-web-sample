@@ -1,4 +1,4 @@
-FROM golang:1.14.0
+FROM golang:1.16.0
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -7,7 +7,7 @@ ARG GRPCWEB_VERSION=1.2.1
 
 WORKDIR /proto
 
-RUN apt-get -qq update && apt-get -qq install -y unzip
+RUN apt-get update && apt-get install -y zip unzip
 RUN curl -sSL https://github.com/protocolbuffers/protobuf/releases/download/v${PROTO_VERSION}/protoc-${PROTO_VERSION}-linux-x86_64.zip -o protoc.zip && \
   unzip -qq protoc.zip && \
   cp ./bin/protoc /usr/local/bin/protoc && \

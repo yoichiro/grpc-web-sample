@@ -2,5 +2,5 @@
 
 set -xe
 
-yarn
+yarn install
 yarn start

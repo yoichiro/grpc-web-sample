@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	pb "github.com/tably/grpc-web-sample/messenger"
+	pb "github.com/tably/grpc-web-sample/echo"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -16,35 +16,31 @@ const (
 )
 
 type server struct {
-	pb.UnimplementedMessengerServer
-	requests []*pb.MessageRequest
+	pb.UnimplementedEchoServer
+	requests []*pb.EchoRequest
 }
 
-func (s *server) GetMessages(_ *emptypb.Empty, stream pb.Messenger_GetMessagesServer) error {
-	for _, r := range s.requests {
-		if err := stream.Send(&pb.MessageResponse{Message: r.GetMessage()}); err != nil {
-			return err
-		}
-	}
-	previousCount := len(s.requests)
+func (s *server) Get(_ *emptypb.Empty, stream pb.Echo_GetServer) error {
+	previousLength := len(s.requests)
 	for {
-		currentCount := len(s.requests)
-		if previousCount < currentCount {
-			r := s.requests[currentCount - 1]
-			log.Printf("Sent: %v", r.GetMessage())
-			if err := stream.Send(&pb.MessageResponse{Message: r.GetMessage()}); err != nil {
+		currentLength := len(s.requests)
+		if previousLength < currentLength {
+			request := s.requests[currentLength - 1]
+			log.Printf("Sent: %v", request)
+			if err := stream.Send(&pb.EchoResponse{Message: request.GetMessage()}); err != nil {
 				return err
 			}
 		}
-		previousCount = currentCount
+		previousLength = currentLength
 	}
 }
 
-func (s *server) CreateMessage(ctx context.Context, r *pb.MessageRequest) (*pb.MessageResponse, error) {
-	log.Printf("Received: %v", r.GetMessage())
-	newR := &pb.MessageRequest{Message: r.GetMessage() + ": " + time.Now().Format("2006-01-02 15:04:05")}
-	s.requests = append(s.requests, newR)
-	return &pb.MessageResponse{Message: r.GetMessage()}, nil
+func (s *server) Send(ctx context.Context, request *pb.EchoRequest) (*pb.EchoResponse, error) {
+	log.Printf("Received: %v", request.GetMessage())
+	timestamp := time.Now().Format("2006-01-02 15:04:05")
+	requestWithTimestamp := &pb.EchoRequest{Message: request.GetMessage() + ": " + timestamp}
+	s.requests = append(s.requests, requestWithTimestamp)
+	return &pb.EchoResponse{Message: request.GetMessage()}, nil
 }
 
 func main() {
@@ -54,7 +50,7 @@ func main() {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	pb.RegisterMessengerServer(s, &server{})
+	pb.RegisterEchoServer(s, &server{})
 	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)

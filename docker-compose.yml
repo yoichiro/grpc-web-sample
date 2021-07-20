@@ -8,34 +8,30 @@ services:
     volumes:
       - .:/proto
   server:
-    command: ./scripts/server.sh
+    image: asia-northeast1-docker.pkg.dev/grpc-web-sample/echo/server:v1
     build:
-      context: .
-      dockerfile: DockerfileServer
-    volumes:
-      - ./server:/go/src/grpc-web-sample
+      context: server
+      dockerfile: Dockerfile
     ports:
       - "9090:9090"
     depends_on:
       - proto
   envoy:
+    image: asia-northeast1-docker.pkg.dev/grpc-web-sample/echo/envoy:v1
     build:
-      context: .
-      dockerfile: DockerfileEnvoy
+      context: envoy
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
       - "9901:9901"
       - "8081:8081"
-    links:
-      - server
+#    links:
+#      - server
   client:
-    command: ./scripts/client.sh
+    image: asia-northeast1-docker.pkg.dev/grpc-web-sample/echo/client:v1
     build:
-      context: .
-      dockerfile: DockerfileClient
-    volumes:
-      - ./client:/client
-      - /client/node_modules
+      context: client
+      dockerfile: Dockerfile
     depends_on:
       - proto
     ports:

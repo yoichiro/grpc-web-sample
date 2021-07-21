@@ -70,7 +70,7 @@ gcloud container clusters create-auto echo
 
 It will take a long time until finishing the creation.
 
-## Edit each yaml files
+## Edit each yaml file
 
 In the `k8s` directory, there are some yaml files, and they have a docker image name. For example:
 

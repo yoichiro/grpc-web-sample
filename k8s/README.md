@@ -70,6 +70,16 @@ gcloud container clusters create-auto echo
 
 It will take a long time until finishing the creation.
 
+## Edit each yaml files
+
+In the `k8s` directory, there are some yaml files, and they have a docker image name. For example:
+
+```
+image: asia-northeast1-docker.pkg.dev/grpc-web-sample/echo/client:v1
+```
+
+You need to change the names. Especially, replace the region name in the name with your specified region name.
+
 ## Deploy docker images for echo-server and envoy-proxy
 
 Deploy the echo-server for the node of the cluster you created in the previous step. Execute the following commands:

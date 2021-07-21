@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-client
+  labels:
+    app: react
+    tier: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react
+  template:
+    metadata:
+      labels:
+        app: react
+        tier: frontend
+    spec:
+      containers:
+        - name: client
+          image: asia-northeast1-docker.pkg.dev/grpc-web-sample/echo/client:v1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          ports:
+            - containerPort: 80

@@ -10,4 +10,6 @@ You can launch this project by typing the following command:
 $ docker-compose up
 ```
 
+Then, you can deploy this sample to GKE on Google Cloud Platform. See: [How to deploy this sample to GKE](k8s/README.md).
+
 Enjoy!

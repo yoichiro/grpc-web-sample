@@ -8,31 +8,32 @@ services:
     volumes:
       - .:/proto
   server:
-    image: asia-northeast1-docker.pkg.dev/grpc-web-sample/echo/server:v1
+    image: echo-server:v1
     build:
       context: server
       dockerfile: Dockerfile
+    container_name: echo-server
     ports:
       - "9090:9090"
     depends_on:
       - proto
   envoy:
-    image: asia-northeast1-docker.pkg.dev/grpc-web-sample/echo/envoy:v1
+    image: envoy-proxy:v1
     build:
       context: envoy
       dockerfile: Dockerfile
+    container_name: envoy-proxy
     ports:
       - "8080:8080"
       - "9901:9901"
       - "8081:8081"
-#    links:
-#      - server
   client:
-    image: asia-northeast1-docker.pkg.dev/grpc-web-sample/echo/client:v1
+    image: echo-client:v1
     build:
       context: client
       dockerfile: Dockerfile
+    container_name: echo-client
     depends_on:
       - proto
     ports:
-      - "3000:3000"
+      - "80:80"

@@ -1,4 +1,4 @@
-FROM node:12.22.3
+FROM node:12.22.3 as builder
 
 ADD package.json /client/
 ADD tsconfig.json /client/
@@ -6,12 +6,10 @@ ADD yarn.lock /client/
 ADD src /client/src
 ADD public /client/public
 
-RUN ls -laF /client
-
 WORKDIR /client
 
 RUN yarn install
+RUN yarn build
 
-EXPOSE 3000
-
-CMD yarn start
+FROM nginx
+COPY --from=builder /client/build /usr/share/nginx/html

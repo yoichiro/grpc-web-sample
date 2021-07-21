@@ -30,7 +30,7 @@ static_resources:
                         - match:
                             prefix: "/"
                           route:
-                            cluster: message_service
+                            cluster: echo_service
                             max_stream_duration:
                               grpc_timeout_header_max: 0s
                       cors:
@@ -70,23 +70,23 @@ static_resources:
                         - match:
                             prefix: "/"
                           route:
-                            cluster: message_service
+                            cluster: echo_service
                             max_stream_duration:
                               grpc_timeout_header_max: 0s
                 http_filters:
                   - name: envoy.filters.http.router
   clusters:
-    - name: message_service
+    - name: echo_service
       connect_timeout: 0.25s
       type: logical_dns
       http2_protocol_options: {}
       lb_policy: round_robin
       load_assignment:
-        cluster_name: message_service
+        cluster_name: echo_service
         endpoints:
           - lb_endpoints:
               - endpoint:
                   address:
                     socket_address:
-                      address: host.docker.internal
+                      address: echo-server
                       port_value: 9090

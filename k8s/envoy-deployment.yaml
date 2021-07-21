@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: envoy-proxy
+  labels:
+    app: envoy
+    tier: proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: envoy
+  template:
+    metadata:
+      labels:
+        app: envoy
+        tier: proxy
+    spec:
+      containers:
+        - name: proxy
+          image: asia-northeast1-docker.pkg.dev/grpc-web-sample/echo/proxy:v1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+            - containerPort: 9901
